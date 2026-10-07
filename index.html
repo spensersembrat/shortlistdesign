@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shortlist social examples</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #141311;
+      --ink: #f5f1ea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, system-ui, sans-serif;
+    }
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 28px 72px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 36px 18px;
+    }
+    section + section { margin-top: 56px; }
+    h2 {
+      margin: 0 0 22px;
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    figure {
+      margin: 0;
+      cursor: pointer;
+    }
+    img, video {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #000;
+    }
+    video {
+      pointer-events: none;
+    }
+    figcaption {
+      margin: 12px 0 0;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-align: center;
+      opacity: 0.45;
+    }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: rgba(8, 7, 6, 0.9);
+    }
+    .lightbox[hidden] { display: none; }
+    .lightbox img,
+    .lightbox video {
+      width: auto;
+      max-width: min(1080px, 92vw);
+      max-height: 88vh;
+    }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <h2>Style 1</h2>
+      <div class="grid">
+      <figure>
+        <video src="videos/style1-a.mp4" poster="images/stop-motion.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-A"></video>
+        <figcaption>Style1-A</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-b.mp4" poster="images/dark-stat.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-B"></video>
+        <figcaption>Style1-B</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-c.mp4" poster="images/signal.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-C"></video>
+        <figcaption>Style1-C</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-d.mp4" poster="images/magazine.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-D"></video>
+        <figcaption>Style1-D</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-e.mp4" poster="images/riso-tenure.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-E"></video>
+        <figcaption>Style1-E</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-f.mp4" poster="images/riso-openings.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-F"></video>
+        <figcaption>Style1-F</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-g.mp4" poster="images/riso-squares.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-G"></video>
+        <figcaption>Style1-G</figcaption>
+      </figure>
+      <figure>
+        <video src="videos/style1-h.mp4" poster="images/riso-quits.png" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Style1-H"></video>
+        <figcaption>Style1-H</figcaption>
+      </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Style 2</h2>
+      <div class="grid">
+      <figure>
+        <img src="images/news-template.png" alt="Style2-A">
+        <figcaption>Style2-A</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-photo.png" alt="Style2-B">
+        <figcaption>Style2-B</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-cohere.png" alt="Style2-C">
+        <figcaption>Style2-C</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-namespace.png" alt="Style2-D">
+        <figcaption>Style2-D</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-light.png" alt="Style2-E">
+        <figcaption>Style2-E</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-paper.png" alt="Style2-F">
+        <figcaption>Style2-F</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-bars.png" alt="Style2-G">
+        <figcaption>Style2-G</figcaption>
+      </figure>
+      <figure>
+        <img src="images/news-poster.png" alt="Style2-H">
+        <figcaption>Style2-H</figcaption>
+      </figure>
+      </div>
+    </section>
+  </main>
+  <div class="lightbox" hidden>
+    <div class="stage"></div>
+  </div>
+  <script>
+    function loopVideo(video) {
+      video.muted = true;
+      video.loop = true;
+      const play = () => video.play().catch(() => {});
+      play();
+      video.addEventListener("ended", () => {
+        video.currentTime = 0;
+        play();
+      });
+    }
+
+    document.querySelectorAll("main video").forEach(loopVideo);
+
+    const lightbox = document.querySelector(".lightbox");
+    const stage = lightbox.querySelector(".stage");
+
+    function closeLightbox() {
+      stage.replaceChildren();
+      lightbox.hidden = true;
+      document.body.style.overflow = "";
+    }
+
+    function openLightbox(source) {
+      stage.replaceChildren();
+      if (source.tagName === "VIDEO") {
+        const video = document.createElement("video");
+        video.src = source.getAttribute("src");
+        video.poster = source.poster;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.setAttribute("disablepictureinpicture", "");
+        stage.append(video);
+        loopVideo(video);
+      } else {
+        const image = document.createElement("img");
+        image.src = source.getAttribute("src");
+        image.alt = source.alt || "";
+        stage.append(image);
+      }
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    document.querySelectorAll("main figure").forEach((figure) => {
+      const media = figure.querySelector("video, img");
+      figure.addEventListener("click", (event) => {
+        if (event.target.closest("figcaption")) return;
+        openLightbox(media);
+      });
+    });
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeLightbox();
+    });
+  </script>
+</body>
+</html>
