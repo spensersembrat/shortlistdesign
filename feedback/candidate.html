@@ -31,6 +31,9 @@
   .facts dd { margin:0; }
   .flag { display:inline-block; font-size:12px; color:var(--rust); background:var(--rust-soft); border-radius:999px; padding:2px 8px; margin-left:6px; }
   .posting { color:var(--ink); font-weight:500; text-decoration:underline; text-underline-offset:3px; }
+  .links { display:flex; flex-wrap:wrap; gap:8px 20px; }
+  .company-link { color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line); }
+  .company-link:hover { border-color:var(--ink); }
 
   .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
   button { font:inherit; cursor:pointer; border-radius:12px; padding:15px 12px; border:1px solid var(--ink); background:transparent; color:var(--ink); font-weight:600; }
@@ -110,7 +113,7 @@ function render() {
     <p class="sub">Job ${idx + 1} of ${jobs.length}. Your answers teach Scout what to find you next.</p>
     <div class="progress" aria-hidden="true">${bars}</div>
     <article class="card">
-      <div class="company">${esc(j.company)}</div>
+      <div class="company">${j.companyPage ? `<a class="company-link" href="${esc(j.companyPage)}" target="_blank" rel="noopener">${esc(j.company)} <span aria-hidden="true">↗</span></a>` : esc(j.company)}</div>
       <div class="title">${esc(j.title)}</div>
       <dl class="facts">
         <dt>Where</dt><dd>${esc(j.location)} · ${esc(MODE[j.workArrangement] || j.workArrangement)}</dd>
@@ -119,7 +122,10 @@ function render() {
         <dt>Company</dt><dd>${esc(STAGE[j.fundingStage] || j.fundingStage)}${j.companySize ? ' · ' + esc(j.companySize) : ''}</dd>
         <dt>Posted</dt><dd>${postedText(j.posted)}${old}</dd>
       </dl>
-      <a class="posting" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Read the full posting ↗</a>
+      <div class="links">
+        <a class="posting" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Read the full posting ↗</a>
+        ${j.companyPage ? `<a class="posting" href="${esc(j.companyPage)}" target="_blank" rel="noopener">About ${esc(j.company)} on SHORTList ↗</a>` : ''}
+      </div>
       <div class="actions">
         <button id="skip" class="${skipping || prev?.decision === 'skip' ? 'sel' : ''}">I wouldn't apply<span class="kbd">←</span></button>
         <button id="apply" class="primary">I'd apply<span class="kbd">→</span></button>

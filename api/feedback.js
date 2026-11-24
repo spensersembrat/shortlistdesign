@@ -8,7 +8,7 @@ import { get, put, list, del } from '@vercel/blob';
 
 const TOKEN_RE = /^[A-Za-z0-9_-]{20,64}$/;
 const ID_RE = /^[0-9a-f-]{36}$/;
-const SAFE_FIELDS = ['listingId', 'title', 'company', 'location', 'workArrangement', 'level', 'fundingStage', 'companySize', 'payMin', 'payMax', 'posted', 'applyUrl'];
+const SAFE_FIELDS = ['listingId', 'title', 'company', 'location', 'workArrangement', 'level', 'fundingStage', 'companySize', 'payMin', 'payMax', 'posted', 'applyUrl', 'companyPage'];
 
 async function readJson(pathname) {
   const r = await get(pathname, { access: 'private', useCache: false });

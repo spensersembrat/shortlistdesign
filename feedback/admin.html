@@ -97,7 +97,7 @@ const API = '/api/feedback?role=a&t=' + encodeURIComponent(location.pathname.spl
         const why = a ? [...(a.reasons || []), a.note ? `“${a.note}”` : ''].filter(Boolean).join(' · ') : '';
         return `<tr class="${miss ? 'miss' : ''}">
           <td class="num">${j.rank}</td>
-          <td class="job"><b>${esc(j.title)}</b><small>${esc(j.company)} · ${esc(j.location)}</small>${j.movedBy.length ? `<small>${esc(j.movedBy.join('; '))}</small>` : ''}</td>
+          <td class="job"><b>${esc(j.title)}</b><small>${j.companyPage ? `<a href="${esc(j.companyPage)}" target="_blank" rel="noopener">${esc(j.company)}</a>` : esc(j.company)} · ${esc(j.location)}</small>${j.movedBy.length ? `<small>${esc(j.movedBy.join('; '))}</small>` : ''}</td>
           <td>${j.shownToCandidate ? '<span class="pill shown">Shown</span>' : '<span class="why">Held back</span>'}</td>
           <td>${a ? `<span class="pill ${a.decision}">${a.decision === 'apply' ? "Would apply" : "Wouldn't apply"}</span>` : '<span class="pill none">No answer</span>'}</td>
           <td class="why">${esc(why)}</td>
