@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/feedback/r/:token", "destination": "/feedback/candidate.html" },
+    { "source": "/feedback/admin/:token", "destination": "/feedback/admin.html" }
+  ],
+  "headers": [
+    {
+      "source": "/feedback/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
+  ]
+}

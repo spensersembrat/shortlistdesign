@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Your jobs from Scout · SHORTList</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#F5F1EA; --card:#FBF8F2; --ink:#1B1A18; --muted:#6E6962; --line:#D9D2C5; --rust:#C04A1A; --rust-soft:#F3E2D8;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.3 Inter, system-ui, sans-serif; }
+  .wrap { max-width:560px; margin:0 auto; padding:28px 20px 48px; min-height:100vh; display:flex; flex-direction:column; }
+  .eyebrow { font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  h1 { font:400 28px/1.3 Fraunces, Georgia, serif; margin:6px 0 4px; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  .progress { display:flex; gap:4px; margin-bottom:18px; }
+  .progress span { flex:1; height:4px; border-radius:2px; background:var(--line); }
+  .progress span.done { background:var(--ink); }
+  .progress span.now { background:var(--rust); }
+
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px; }
+  .company { font-weight:600; font-size:15px; }
+  .title { font:400 30px/1.15 Fraunces, Georgia, serif; margin:6px 0 16px; text-wrap:balance; }
+  .facts { display:grid; grid-template-columns:auto 1fr; gap:8px 16px; margin:0 0 18px; }
+  .facts dt { color:var(--muted); }
+  .facts dd { margin:0; }
+  .flag { display:inline-block; font-size:12px; color:var(--rust); background:var(--rust-soft); border-radius:999px; padding:2px 8px; margin-left:6px; }
+  .posting { color:var(--ink); font-weight:500; text-decoration:underline; text-underline-offset:3px; }
+
+  .actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+  button { font:inherit; cursor:pointer; border-radius:12px; padding:15px 12px; border:1px solid var(--ink); background:transparent; color:var(--ink); font-weight:600; }
+  button.primary { background:var(--rust); border-color:var(--rust); color:#fff; }
+  button:focus-visible { outline:2px solid var(--rust); outline-offset:2px; }
+  button.sel { background:var(--ink); color:var(--bg); }
+  .kbd { font-weight:400; opacity:.6; font-size:12px; margin-left:4px; }
+
+  .why { margin-top:16px; border-top:1px solid var(--line); padding-top:16px; }
+  .why h2 { font:600 15px/1.3 Inter, sans-serif; margin:0 0 10px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-weight:500; }
+  .chip[aria-pressed="true"] { border-color:var(--ink); background:var(--ink); color:var(--bg); }
+  textarea { width:100%; margin-top:12px; font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:#fff; resize:vertical; min-height:64px; }
+  .next { width:100%; margin-top:12px; }
+
+  .nav { display:flex; justify-content:space-between; margin-top:14px; color:var(--muted); font-size:13px; }
+  .linkbtn { border:0; padding:4px 0; background:none; color:var(--muted); font-weight:500; text-decoration:underline; text-underline-offset:3px; }
+
+  .done-card h2 { font:400 28px/1.3 Fraunces, Georgia, serif; margin:0 0 8px; }
+  .tally { display:flex; gap:12px; margin:16px 0; }
+  .tally div { flex:1; border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .tally b { display:block; font:400 32px/1 Fraunces, serif; }
+  .list { list-style:none; padding:0; margin:0; }
+  .list li { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line); }
+  .list .ans { white-space:nowrap; color:var(--muted); }
+  .list .ans.apply { color:var(--rust); font-weight:600; }
+</style>
+</head>
+<body>
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<script>
+const REASONS = [
+  'Not my kind of role', 'Too senior for me', 'Too junior for me', 'Wrong location',
+  "Don't want in-person", 'Pay too low or not listed', 'Not into this company',
+  'Not into this industry', 'Looks old or closed', 'Visa or sponsorship worry', 'Already applied',
+];
+const LEVEL = { entry:'Entry level', mid:'Mid level', senior:'Senior', lead:'Lead', exec:'Executive' };
+const MODE = { hybrid:'Hybrid', in_person:'In person', remote:'Remote' };
+const STAGE = { seed:'Seed', series_a:'Series A', series_b:'Series B', series_c:'Series C', series_d_plus:'Series D+' };
+
+let search, answers = {}, idx = 0, draft = null;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const k = (n) => '$' + Math.round(n / 1000) + 'k';
+function monthsAgo(d) { const m = Math.round((Date.now() - new Date(d)) / (30.4 * 864e5)); return m; }
+function postedText(d) {
+  const m = monthsAgo(d);
+  if (m < 1) return 'This month';
+  if (m < 12) return `${m} month${m === 1 ? '' : 's'} ago`;
+  const y = Math.floor(m / 12); return `Over ${y} year${y === 1 ? '' : 's'} ago`;
+}
+
+const API = '/api/feedback?role=c&t=' + encodeURIComponent(location.pathname.split('/').filter(Boolean).pop() || '');
+let firstName = '';
+
+async function save(listingId, decision, reasons = [], note = '') {
+  const r = await fetch(API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ listingId, decision, reasons, note }) });
+  if (!r.ok) { alert("Sorry, that didn't save. Please try again."); throw new Error('save failed'); }
+  answers[listingId] = (await r.json()).answer;
+}
+
+function render() {
+  const jobs = search.jobs;
+  if (idx >= jobs.length) return renderDone();
+  const j = jobs[idx];
+  const prev = answers[j.listingId];
+  const bars = jobs.map((x, i) => `<span class="${i === idx ? 'now' : answers[x.listingId] ? 'done' : ''}"></span>`).join('');
+  const pay = j.payMin ? `${k(j.payMin)} – ${k(j.payMax)}` : 'Not listed';
+  const old = monthsAgo(j.posted) >= 9 ? '<span class="flag">may be filled</span>' : '';
+  const skipping = draft?.listingId === j.listingId;
+
+  $('#app').innerHTML = `
+    <div class="eyebrow">Your jobs from Scout</div>
+    <h1>${firstName ? esc(firstName) + ', would' : 'Would'} you apply?</h1>
+    <p class="sub">Job ${idx + 1} of ${jobs.length}. Your answers teach Scout what to find you next.</p>
+    <div class="progress" aria-hidden="true">${bars}</div>
+    <article class="card">
+      <div class="company">${esc(j.company)}</div>
+      <div class="title">${esc(j.title)}</div>
+      <dl class="facts">
+        <dt>Where</dt><dd>${esc(j.location)} · ${esc(MODE[j.workArrangement] || j.workArrangement)}</dd>
+        <dt>Level</dt><dd>${esc(LEVEL[j.level] || j.level)}</dd>
+        <dt>Pay</dt><dd>${esc(pay)}</dd>
+        <dt>Company</dt><dd>${esc(STAGE[j.fundingStage] || j.fundingStage)}${j.companySize ? ' · ' + esc(j.companySize) : ''}</dd>
+        <dt>Posted</dt><dd>${postedText(j.posted)}${old}</dd>
+      </dl>
+      <a class="posting" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Read the full posting ↗</a>
+      <div class="actions">
+        <button id="skip" class="${skipping || prev?.decision === 'skip' ? 'sel' : ''}">I wouldn't apply<span class="kbd">←</span></button>
+        <button id="apply" class="primary">I'd apply<span class="kbd">→</span></button>
+      </div>
+      ${skipping ? `
+      <section class="why">
+        <h2>What puts you off? <span style="font-weight:400;color:var(--muted)">Pick any</span></h2>
+        <div class="chips">${REASONS.map((r) => `<button class="chip" aria-pressed="${draft.reasons.includes(r)}" data-r="${esc(r)}">${esc(r)}</button>`).join('')}</div>
+        <textarea id="note" placeholder="Anything else? (optional)">${esc(draft.note)}</textarea>
+        <button class="primary next" id="next">Next job</button>
+      </section>` : ''}
+    </article>
+    <div class="nav">
+      ${idx > 0 ? '<button class="linkbtn" id="back">← Previous job</button>' : '<span></span>'}
+      <span>${Object.keys(answers).length} answered</span>
+    </div>`;
+
+  $('#apply').onclick = async () => { draft = null; await save(j.listingId, 'apply'); idx++; render(); };
+  $('#skip').onclick = () => {
+    if (skipping) return;
+    draft = { listingId: j.listingId, reasons: prev?.decision === 'skip' ? [...prev.reasons] : [], note: prev?.decision === 'skip' ? prev.note : '' };
+    render(); $('.why .chip')?.focus();
+  };
+  $('#back') && ($('#back').onclick = () => { draft = null; idx--; render(); });
+  if (skipping) {
+    document.querySelectorAll('.chip').forEach((c) => c.onclick = () => {
+      const r = c.dataset.r; const i = draft.reasons.indexOf(r);
+      i < 0 ? draft.reasons.push(r) : draft.reasons.splice(i, 1);
+      c.setAttribute('aria-pressed', i < 0);
+    });
+    $('#note').oninput = (e) => { draft.note = e.target.value; };
+    $('#next').onclick = async () => { await save(j.listingId, 'skip', draft.reasons, draft.note); draft = null; idx++; render(); };
+  }
+}
+
+function renderDone() {
+  const jobs = search.jobs;
+  const yes = jobs.filter((j) => answers[j.listingId]?.decision === 'apply');
+  $('#app').innerHTML = `
+    <div class="eyebrow">Your jobs from Scout</div>
+    <article class="card done-card" style="margin-top:12px">
+      <h2>Thanks, that helps a lot.</h2>
+      <p class="sub" style="margin:0">Scout will use this to pick your next jobs.</p>
+      <div class="tally"><div><b>${yes.length}</b>you'd apply to</div><div><b>${jobs.length - yes.length}</b>you'd pass on</div></div>
+      <ul class="list">${jobs.map((j, i) => {
+        const a = answers[j.listingId];
+        return `<li><span>${esc(j.title)} · ${esc(j.company)}</span><button class="linkbtn ans ${a?.decision === 'apply' ? 'apply' : ''}" data-i="${i}">${a ? (a.decision === 'apply' ? "I'd apply" : 'Pass') : 'Not answered'}</button></li>`;
+      }).join('')}</ul>
+      <p class="sub" style="margin:12px 0 0;font-size:13px">Tap an answer to change it.</p>
+    </article>`;
+  document.querySelectorAll('[data-i]').forEach((b) => b.onclick = () => { idx = +b.dataset.i; render(); });
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'TEXTAREA' || idx >= search.jobs.length) return;
+  if (e.key === 'ArrowRight') $('#apply')?.click();
+  if (e.key === 'ArrowLeft') $('#skip')?.click();
+});
+
+(async () => {
+  const r = await fetch(API);
+  if (!r.ok) {
+    $('#app').innerHTML = `<div class="eyebrow">SHORTList</div><h1>This link isn't working</h1><p class="sub">Check you copied the whole link, or reply to the email it came in and we'll send a new one.</p>`;
+    return;
+  }
+  const d = await r.json();
+  search = { jobs: d.jobs }; answers = d.answers; firstName = d.firstName;
+  const first = search.jobs.findIndex((j) => !answers[j.listingId]);
+  idx = first < 0 ? search.jobs.length : first;
+  render();
+})();
+</script>
+</body>
+</html>
